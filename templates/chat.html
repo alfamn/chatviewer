@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="sidebar">
+  <h2>Conversas</h2>
+  <form method="get" action="{{ url_for('chat') }}">
+    <select name="instance" onchange="this.form.submit()">
+      <option value="">Selecione a instância</option>
+      {% for inst in instances %}
+        <option value="{{ inst }}" {% if inst == instance %}selected{% endif %}>{{ inst }}</option>
+      {% endfor %}
+    </select>
+  </form>
+  <ul>
+    {% for conv in conversations %}
+      <li>
+        <a href="{{ url_for('chat', instance=instance, remoteJid=conv.remotejid) }}">
+          {{ conv.remotejid.split('@')[0] }} - {{ conv.last_date.strftime("%d/%m/%Y %H:%M") }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="chat-container">
+  <div class="chat-header">
+    {% if remoteJid %}
+      Conversa com <strong>{{ remoteJid.split('@')[0] }}</strong>
+    {% else %}
+      Selecione uma conversa
+    {% endif %}
+  </div>
+  <div id="chat" class="chat-area">
+    {% for msg in messages %}
+      <div class="chat-bubble {% if msg.sender == 'ai' %}chat-right{% else %}chat-left{% endif %}">
+        {{ msg.message }}
+        <div class="timestamp">{{ msg.date_time.strftime("%d/%m/%Y %H:%M") }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+function refreshMessages() {
+  const instance = "{{ instance }}";
+  const remoteJid = "{{ remoteJid }}";
+  if (!instance || !remoteJid) return;
+  $.getJSON(`/messages?instance=${instance}&remoteJid=${remoteJid}`, function(data) {
+    let html = "";
+    data.forEach(msg => {
+      html += `<div class="chat-bubble ${msg.sender === 'ai' ? 'chat-right' : 'chat-left'}">
+        ${msg.message}
+        <div class="timestamp">${msg.date_time}</div>
+      </div>`;
+    });
+    $("#chat").html(html);
+  });
+}
+setInterval(refreshMessages, 5000);
+</script>
+{% endblock %}
