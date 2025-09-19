@@ -1,7 +1,7 @@
 annotated-types==0.7.0
 anyio==4.10.0
 attrs==21.2.0
-bcc==0.18.0
+boto3==1.34.80
 bidict==0.23.1
 blinker==1.9.0
 Brlapi==0.8.3
