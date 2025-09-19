@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Flask==3.1.2
 Flask-SQLAlchemy==3.1.1
 psycopg2-binary==2.9.10
@@ -8,3 +9,9 @@ itsdangerous==2.2.0
 MarkupSafe==3.0.2
 python-dotenv==1.0.0
 gunicorn==21.2.0
+=======
+Flask==3.0.3
+Flask-SQLAlchemy==3.1.1
+psycopg2-binary==2.9.9
+gunicorn==21.2.0
+>>>>>>> 37793ba (Atualização de projeto)
